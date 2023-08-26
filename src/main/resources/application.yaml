@@ -2,10 +2,10 @@ server:
   port: 8081
 
 spring:
-  # spring ????
+  # spring 基础配置
   application:
     name: test-station
-  # ?????
+  # 数据库配置
   datasource:
     username: root
     password: cyhcd5201314
@@ -14,5 +14,5 @@ spring:
 
 mybatis-plus:
   configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # ?????? ?????????
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 配置日志输出 使用默认控制台打印
   mapper-locations: classpath:mapper/*.xml
