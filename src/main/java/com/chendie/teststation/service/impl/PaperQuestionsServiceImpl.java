@@ -1,13 +1,10 @@
 package com.chendie.teststation.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chendie.teststation.entity.PaperQuestions;
 import com.chendie.teststation.mapper.PaperQuestionsMapper;
-import service.IPaperQuestionsService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.chendie.teststation.service.IPaperQuestionsService;
 import org.springframework.stereotype.Service;
-
-import static com.baomidou.mybatisplus.generator.config.OutputFile.entity;
-import static com.baomidou.mybatisplus.generator.config.OutputFile.mapper;
 
 /**
  * <p>

@@ -1,5 +1,7 @@
 package com.chendie.teststation.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 
@@ -15,10 +17,9 @@ import lombok.Data;
  */
 @Data
 @TableName("paper_questions")
-public class PaperQuestions implements Serializable {
+public class PaperQuestions {
 
-    private static final long serialVersionUID = 1L;
-
+    @TableId(type = IdType.AUTO)
     private Long pQid;
 
     private Long pid;

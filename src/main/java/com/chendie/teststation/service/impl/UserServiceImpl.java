@@ -1,9 +1,9 @@
-package service.impl;
+package com.chendie.teststation.service.impl;
 
-import entity.User;
-import mapper.UserMapper;
-import service.IUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.chendie.teststation.entity.User;
+import com.chendie.teststation.mapper.UserMapper;
+import com.chendie.teststation.service.IUserService;
 import org.springframework.stereotype.Service;
 
 /**

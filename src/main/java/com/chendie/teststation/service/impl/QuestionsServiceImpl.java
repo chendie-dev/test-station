@@ -1,9 +1,9 @@
 package com.chendie.teststation.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chendie.teststation.entity.Questions;
 import com.chendie.teststation.mapper.QuestionsMapper;
-import service.IQuestionsService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.chendie.teststation.service.IQuestionsService;
 import org.springframework.stereotype.Service;
 
 

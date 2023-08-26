@@ -1,7 +1,7 @@
-package service;
+package com.chendie.teststation.service;
 
-import entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.chendie.teststation.entity.User;
 
 /**
  * <p>
