@@ -1,10 +1,7 @@
 package com.chendie.teststation.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.chendie.teststation.entity.Paper;
-import org.apache.ibatis.annotations.Mapper;
-
-import static com.baomidou.mybatisplus.generator.config.OutputFile.entity;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
  * <p>
@@ -12,9 +9,8 @@ import static com.baomidou.mybatisplus.generator.config.OutputFile.entity;
  * </p>
  *
  * @author chendie
- * @since 2023-08-26
+ * @since 2023-10-01
  */
-@Mapper
 public interface PaperMapper extends BaseMapper<Paper> {
 
 }

@@ -1,6 +1,6 @@
 package com.chendie.teststation.mapper;
 
-import com.chendie.teststation.entity.User;
+import com.chendie.teststation.entity.ExamRecordDetail;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author chendie
  * @since 2023-10-01
  */
-public interface UserMapper extends BaseMapper<User> {
+public interface ExamRecordDetailMapper extends BaseMapper<ExamRecordDetail> {
 
 }

@@ -1,7 +1,7 @@
 package com.chendie.teststation.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.chendie.teststation.entity.User;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * <p>
@@ -9,7 +9,7 @@ import com.chendie.teststation.entity.User;
  * </p>
  *
  * @author chendie
- * @since 2023-08-26
+ * @since 2023-10-01
  */
 public interface IUserService extends IService<User> {
 

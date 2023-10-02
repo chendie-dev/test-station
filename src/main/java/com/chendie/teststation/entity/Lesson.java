@@ -15,40 +15,20 @@ import java.io.Serializable;
  * @since 2023-10-01
  */
 @Data
-public class User implements Serializable {
+public class Lesson implements Serializable {
 
-    private static final long serialVersionUID = -3500379313244909559L;
-
-    /**
-     * 用户id
-     */
-    @TableId(value = "user_id", type = IdType.AUTO)
-    private Long userId;
-
-    /**
-     * 用户名
-     */
-    private String username;
-
-    /**
-     * 真实名称
-     */
-    private String realName;
-
-    /**
-     * 密码
-     */
-    private String password;
+    private static final long serialVersionUID = -4225421794932510368L;
 
     /**
      * 班级id
      */
+    @TableId(value = "lesson_id", type = IdType.AUTO)
     private Long lessonId;
 
     /**
-     * 角色类型
+     * 试卷标题
      */
-    private String roleName;
+    private String lessonName;
 
     /**
      * 创建时间

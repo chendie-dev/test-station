@@ -12,7 +12,7 @@ import org.springframework.stereotype.Controller;
  * @since 2023-10-01
  */
 @Controller
-@RequestMapping("/paper")
-public class PaperController {
+@RequestMapping("/tag")
+public class TagController {
 
 }

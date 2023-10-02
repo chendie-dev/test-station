@@ -1,8 +1,8 @@
 package com.chendie.teststation.service.impl;
 
-import com.chendie.teststation.entity.Paper;
-import com.chendie.teststation.mapper.PaperMapper;
-import com.chendie.teststation.service.IPaperService;
+import com.chendie.teststation.entity.Tag;
+import com.chendie.teststation.mapper.TagMapper;
+import com.chendie.teststation.service.ITagService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +15,6 @@ import org.springframework.stereotype.Service;
  * @since 2023-10-01
  */
 @Service
-public class PaperServiceImpl extends ServiceImpl<PaperMapper, Paper> implements IPaperService {
+public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements ITagService {
 
 }

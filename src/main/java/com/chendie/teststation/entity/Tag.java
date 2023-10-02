@@ -15,40 +15,30 @@ import java.io.Serializable;
  * @since 2023-10-01
  */
 @Data
-public class Paper implements Serializable {
+public class Tag implements Serializable {
 
-    private static final long serialVersionUID = -393126775578187303L;
-
-    /**
-     * 试卷id
-     */
-    @TableId(value = "paper_id", type = IdType.AUTO)
-    private Long paperId;
-
-    /**
-     * 试卷标题
-     */
-    private String title;
-
-    /**
-     * 考试时间
-     */
-    private Long time;
-
-    /**
-     * 创建人id
-     */
-    private Long userId;
+    private static final long serialVersionUID = -7014861621647880574L;
 
     /**
      * 标签id
      */
+    @TableId(value = "tag_id", type = IdType.AUTO)
     private Long tagId;
 
     /**
-     * 分值
+     * 用户id
      */
-    private Integer totalScore;
+    private Long userId;
+
+    /**
+     * 信息标题
+     */
+    private String tagName;
+
+    /**
+     * 标签备注
+     */
+    private String desc;
 
     /**
      * 创建时间

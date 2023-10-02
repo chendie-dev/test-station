@@ -2,6 +2,7 @@ package com.chendie.teststation.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -15,40 +16,36 @@ import java.io.Serializable;
  * @since 2023-10-01
  */
 @Data
-public class Paper implements Serializable {
+@TableName("exam_record")
+public class ExamRecord implements Serializable {
 
-    private static final long serialVersionUID = -393126775578187303L;
+    private static final long serialVersionUID = 6044162936102609143L;
 
     /**
-     * 试卷id
+     * 考试记录id
      */
-    @TableId(value = "paper_id", type = IdType.AUTO)
-    private Long paperId;
+    @TableId(value = "record_id", type = IdType.AUTO)
+    private Long recordId;
 
     /**
-     * 试卷标题
-     */
-    private String title;
-
-    /**
-     * 考试时间
-     */
-    private Long time;
-
-    /**
-     * 创建人id
+     * 用户id
      */
     private Long userId;
 
     /**
-     * 标签id
+     * 试卷id
      */
-    private Long tagId;
+    private Long paperId;
 
     /**
-     * 分值
+     * 成绩
      */
-    private Integer totalScore;
+    private Integer grade;
+
+    /**
+     * 使用时间
+     */
+    private Long useTime;
 
     /**
      * 创建时间

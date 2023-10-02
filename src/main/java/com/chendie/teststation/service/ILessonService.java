@@ -1,7 +1,7 @@
 package com.chendie.teststation.service;
 
+import com.chendie.teststation.entity.Lesson;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.chendie.teststation.entity.Questions;
 
 /**
  * <p>
@@ -9,8 +9,8 @@ import com.chendie.teststation.entity.Questions;
  * </p>
  *
  * @author chendie
- * @since 2023-08-26
+ * @since 2023-10-01
  */
-public interface IQuestionsService extends IService<Questions> {
+public interface ILessonService extends IService<Lesson> {
 
 }
