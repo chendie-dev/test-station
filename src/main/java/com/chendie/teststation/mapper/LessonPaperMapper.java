@@ -1,6 +1,6 @@
 package com.chendie.teststation.mapper;
 
-import com.chendie.teststation.entity.UserPaper;
+import com.chendie.teststation.entity.LessonPaper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -9,8 +9,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author chendie
- * @since 2023-10-01
+ * @since 2023-10-03
  */
-public interface UserPaperMapper extends BaseMapper<UserPaper> {
+public interface LessonPaperMapper extends BaseMapper<LessonPaper> {
 
 }

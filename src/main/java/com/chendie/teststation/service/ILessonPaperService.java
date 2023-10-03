@@ -1,6 +1,6 @@
 package com.chendie.teststation.service;
 
-import com.chendie.teststation.entity.UserPaper;
+import com.chendie.teststation.entity.LessonPaper;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -9,8 +9,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * </p>
  *
  * @author chendie
- * @since 2023-10-01
+ * @since 2023-10-03
  */
-public interface IUserPaperService extends IService<UserPaper> {
+public interface ILessonPaperService extends IService<LessonPaper> {
 
 }

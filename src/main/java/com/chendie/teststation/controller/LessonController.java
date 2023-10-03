@@ -4,16 +4,19 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.chendie.teststation.convert.LessonConvert;
 import com.chendie.teststation.entity.Lesson;
+import com.chendie.teststation.entity.LessonPaper;
 import com.chendie.teststation.model.IdView;
 import com.chendie.teststation.model.PageQry;
 import com.chendie.teststation.model.PageResult;
 import com.chendie.teststation.model.ResultView;
+import com.chendie.teststation.service.ILessonPaperService;
 import com.chendie.teststation.service.ILessonService;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
 import java.util.LinkedHashMap;
@@ -33,6 +36,8 @@ import java.util.Objects;
 public class LessonController {
     @Resource
     private ILessonService lessonService;
+    @Resource
+    private ILessonPaperService lessonPaperService;
 
     @PostMapping("/addOrUpdateLesson")
     public ResultView<IdView> addOrUpdateLesson(
@@ -81,4 +86,19 @@ public class LessonController {
         pageResult.setData(lessonList);
         return ResultView.success(pageResult);
     }
+
+    @PostMapping("/getLessonsByPaper")
+    public ResultView<List<Lesson>> getLessonsByPaper(
+            @RequestParam("paperId") Long paperId
+    ) {
+        // 先去关系表里面获取对应信息
+        LambdaQueryWrapper<LessonPaper> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper
+                .eq(LessonPaper::getPaperId, paperId);
+        List<LessonPaper> lessonPaperList = lessonPaperService.list(queryWrapper);
+        // 去表里面获取
+        List<Lesson> lessonList = lessonService.listByIds(lessonPaperList);
+        return ResultView.success(lessonList);
+    }
+
 }

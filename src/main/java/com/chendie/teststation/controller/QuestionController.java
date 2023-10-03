@@ -3,22 +3,26 @@ package com.chendie.teststation.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.chendie.teststation.convert.QuestionConvert;
+import com.chendie.teststation.entity.PaperQuestion;
 import com.chendie.teststation.entity.Question;
 import com.chendie.teststation.model.IdView;
 import com.chendie.teststation.model.PageQry;
 import com.chendie.teststation.model.PageResult;
 import com.chendie.teststation.model.ResultView;
+import com.chendie.teststation.service.IPaperQuestionService;
 import com.chendie.teststation.service.IQuestionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -33,6 +37,8 @@ import java.util.Objects;
 public class QuestionController {
     @Resource
     private IQuestionService questionService;
+    @Resource
+    private IPaperQuestionService paperQuestionService;
 
     @PostMapping("/addOrUpdateQuestion")
     public ResultView<IdView> addOrUpdateQuestion(
@@ -80,5 +86,21 @@ public class QuestionController {
         pageResult.setTotalPage(questionPage.getPages());
         pageResult.setData(questionList);
         return ResultView.success(pageResult);
+    }
+
+    @PostMapping("/getQuestionsByPaper")
+    public ResultView<List<Question>> getQuestionsByPaper(
+            @RequestParam("paperId") Long paperId
+    ) {
+        // 通过paperId获取所有的question
+        LambdaQueryWrapper<PaperQuestion> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper
+                .eq(PaperQuestion::getPaperId, paperId);
+        List<PaperQuestion> paperQuestions = paperQuestionService.list(queryWrapper);
+        List<Long> questionIdList = paperQuestions.stream()
+                .map(PaperQuestion::getQuestionId)
+                .collect(Collectors.toList());
+        List<Question> questionList = questionService.listByIds(questionIdList);
+        return ResultView.success(questionList);
     }
 }

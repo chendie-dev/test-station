@@ -26,9 +26,7 @@ public class MyBatisPlusGenerator {
 //                                    "D://")); // 设置mapperXml生成路径
       })
       .strategyConfig(builder -> {
-        builder.addInclude("user","paper","user_paper","question",
-                "paper_question","lesson","exam_record","exam_record_detail",
-                "information","user_information","tag"); // 设置需要生成的表名
+        builder.addInclude("lesson_paper"); // 设置需要生成的表名
 //                            .addTablePrefix("t_", "c_"); // 设置过滤表前缀
         builder
           .entityBuilder()

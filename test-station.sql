@@ -26,14 +26,14 @@ CREATE TABLE `paper`  (
   PRIMARY KEY (`paper_id`)
 );
 
--- 用户试题关系表
-DROP TABLE IF EXISTS `user_paper`;
-CREATE TABLE `user_paper`  (
-    `user_paper_id`   bigint          NOT NULL AUTO_INCREMENT COMMENT 'id',
-    `user_id`         bigint          NOT NULL DEFAULT 0      COMMENT '用户id',
+-- 班级试卷关系表
+DROP TABLE IF EXISTS `lesson_paper`;
+CREATE TABLE `lesson_paper`  (
+    `lesson_paper_id`   bigint          NOT NULL AUTO_INCREMENT COMMENT 'id',
+    `lesson_id`         bigint          NOT NULL DEFAULT 0      COMMENT '班级id',
     `paper_id`        bigint          NOT NULL DEFAULT 0      COMMENT '试卷id',
     `create_time`     bigint          NOT NULL DEFAULT 0      COMMENT '创建时间',
-    PRIMARY KEY (`user_paper_id`)
+    PRIMARY KEY (`lesson_paper_id`)
 );
 
 -- 试题 question
