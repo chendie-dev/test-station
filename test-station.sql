@@ -115,6 +115,7 @@ CREATE TABLE `user_information`  (
     `user_information_id`   bigint          NOT NULL AUTO_INCREMENT COMMENT 'id',
     `user_id`               bigint          NOT NULL DEFAULT 0      COMMENT '用户id',
     `information_id`        bigint          NOT NULL DEFAULT 0      COMMENT '信息id',
+    `isRead`                tinyint         NOT NULL DEFAULT 0      COMMENT '是否已读',
     `create_time`           bigint          NOT NULL DEFAULT 0      COMMENT '创建时间',
     PRIMARY KEY (`user_information_id`)
 );

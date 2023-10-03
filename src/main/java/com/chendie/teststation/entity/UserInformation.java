@@ -36,6 +36,11 @@ public class UserInformation implements Serializable {
     private Long informationId;
 
     /**
+     * 是否已读
+     */
+    private Integer isRead;
+
+    /**
      * 创建时间
      */
     @TableField(fill = FieldFill.INSERT)
