@@ -7,6 +7,7 @@ import com.chendie.teststation.convert.PaperConvert;
 import com.chendie.teststation.entity.LessonPaper;
 import com.chendie.teststation.entity.Paper;
 import com.chendie.teststation.entity.PaperQuestion;
+import com.chendie.teststation.entity.User;
 import com.chendie.teststation.model.IdView;
 import com.chendie.teststation.model.PageQry;
 import com.chendie.teststation.model.PageResult;
@@ -14,6 +15,7 @@ import com.chendie.teststation.model.ResultView;
 import com.chendie.teststation.service.ILessonPaperService;
 import com.chendie.teststation.service.IPaperQuestionService;
 import com.chendie.teststation.service.IPaperService;
+import com.chendie.teststation.service.IUserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,6 +46,8 @@ public class PaperController {
     private IPaperQuestionService paperQuestionService;
     @Resource
     private ILessonPaperService lessonPaperService;
+    @Resource
+    private IUserService userService;
 
     @PostMapping("/addPaperOrUpdate")
     public ResultView<IdView> addPaperOrUpdate(
@@ -74,6 +78,7 @@ public class PaperController {
         Paper queryParam = paperPageQry.getQueryParam();
         // 条件
         queryWrapper
+                .eq(Objects.nonNull(queryParam.getTagId()), Paper::getTagId, queryParam.getTagId())
                 .eq(Objects.nonNull(queryParam.getPaperId()), Paper::getPaperId, queryParam.getPaperId())
                 .like(Objects.nonNull(queryParam.getTitle()), Paper::getTitle, queryParam.getTitle());
         // 排序规则
@@ -131,6 +136,28 @@ public class PaperController {
         }).collect(Collectors.toList());
         boolean saveBatch = lessonPaperService.saveBatch(lessonPaperList);
         return ResultView.success(saveBatch);
+    }
+
+    @PostMapping("/getPapersByUser")
+    public ResultView<List<Paper>> getPapersByUser(
+            @RequestParam("userId") Long userId,
+            @RequestParam("title") String title
+    ) {
+        // 获取对应的班级
+        User user = userService.getById(userId);
+        Long lessonId = user.getLessonId();
+        // 获取当前班级绑定的所有试卷
+        List<LessonPaper> lessonPaperList = lessonPaperService
+                .list(new LambdaQueryWrapper<LessonPaper>()
+                        .eq(LessonPaper::getLessonId, lessonId));
+        // 获取所有的试卷id
+        List<Long> paperIdList = lessonPaperList.stream()
+                .map(LessonPaper::getPaperId)
+                .collect(Collectors.toList());
+        List<Paper> papers = paperService.list(new LambdaQueryWrapper<Paper>()
+                .like(Objects.nonNull(title), Paper::getTitle, title)
+                .in(!CollectionUtils.isEmpty(paperIdList), Paper::getPaperId, paperIdList));
+        return ResultView.success(papers);
     }
 
 }

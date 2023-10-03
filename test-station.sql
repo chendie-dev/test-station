@@ -88,10 +88,10 @@ CREATE TABLE `exam_record`  (
 -- 考试记录详细
 DROP TABLE IF EXISTS `exam_record_detail`;
 CREATE TABLE `exam_record_detail`  (
-    `detail_id`      bigint          NOT NULL AUTO_INCREMENT COMMENT '考试记录id',
+    `detail_id`      bigint          NOT NULL AUTO_INCREMENT COMMENT '考试记录详细id',
     `record_id`      bigint          NOT NULL DEFAULT 0      COMMENT '考试记录id',
     `question_id`    bigint          NOT NULL DEFAULT 0      COMMENT '试题id',
-    `store`          int             NOT NULL DEFAULT 0      COMMENT '成绩',
+    `score`          int             NOT NULL DEFAULT 0      COMMENT '成绩',
     `reply`          varchar(1024)   NOT NULL DEFAULT ''     COMMENT '回答',
     `create_time`    bigint          NOT NULL DEFAULT 0      COMMENT '创建时间',
     `update_time`    bigint          NOT NULL DEFAULT 0      COMMENT '更新时间',

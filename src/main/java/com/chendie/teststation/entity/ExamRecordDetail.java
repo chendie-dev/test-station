@@ -38,7 +38,7 @@ public class ExamRecordDetail implements Serializable {
     /**
      * 成绩
      */
-    private Integer store;
+    private Integer score;
 
     /**
      * 回答
