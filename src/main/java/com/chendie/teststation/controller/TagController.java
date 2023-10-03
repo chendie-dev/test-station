@@ -42,7 +42,7 @@ public class TagController {
         boolean ok = tagService.saveOrUpdate(tag);
         IdView idView = IdView.builder().build();
         if (ok) {
-            idView.setId(tag.getUserId());
+            idView.setId(tag.getTagId());
         }
         return ResultView.success(idView);
     }
