@@ -1,4 +1,4 @@
-package com.chendie.teststation;
+package com.chendie.teststation.mybatisplus.generator;
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 public class MyBatisPlusGenerator {
