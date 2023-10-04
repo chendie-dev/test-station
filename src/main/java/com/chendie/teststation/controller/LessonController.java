@@ -18,6 +18,7 @@ import javax.annotation.Resource;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -93,7 +94,10 @@ public class LessonController {
                 .eq(LessonPaper::getPaperId, paperId);
         List<LessonPaper> lessonPaperList = lessonPaperService.list(queryWrapper);
         // 去表里面获取
-        List<Lesson> lessonList = lessonService.listByIds(lessonPaperList);
+        List<Long> lessonIdList = lessonPaperList.stream()
+                .map(LessonPaper::getLessonId)
+                .collect(Collectors.toList());
+        List<Lesson> lessonList = lessonService.listByIds(lessonIdList);
         return ResultView.success(lessonList);
     }
 

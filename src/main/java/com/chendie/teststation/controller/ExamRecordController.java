@@ -5,12 +5,16 @@ import com.chendie.teststation.entity.ExamRecord;
 import com.chendie.teststation.entity.ExamRecordDetail;
 import com.chendie.teststation.entity.PaperQuestion;
 import com.chendie.teststation.entity.Question;
+import com.chendie.teststation.model.AddExamRecordModel;
 import com.chendie.teststation.model.ResultView;
 import com.chendie.teststation.service.IExamRecordDetailService;
 import com.chendie.teststation.service.IExamRecordService;
 import com.chendie.teststation.service.IPaperQuestionService;
 import com.chendie.teststation.service.IQuestionService;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -40,11 +44,12 @@ public class ExamRecordController {
 
     @PostMapping("/addExamRecord")
     public ResultView<Boolean> addExamRecord(
-            @RequestParam("userId") Long userId,
-            @RequestParam("paperId") Long paperId,
-            @RequestParam("useTime") Long useTime,
-            @RequestParam("replyList") List<String> replyList
+            @RequestBody AddExamRecordModel addExamRecordModel
     ) {
+        Long paperId = addExamRecordModel.getPaperId();
+        Long userId = addExamRecordModel.getUserId();
+        Long useTime = addExamRecordModel.getUseTime();
+        List<String> replyList = addExamRecordModel.getReplyList();
         // 获取所有的问题列表，和回复一一对应
         List<PaperQuestion> paperQuestionList = paperQuestionService
                 .list(new LambdaQueryWrapper<PaperQuestion>()

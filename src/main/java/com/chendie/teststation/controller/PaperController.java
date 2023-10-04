@@ -73,6 +73,7 @@ public class PaperController {
         queryWrapper
                 .eq(Objects.nonNull(queryParam.getTagId()), Paper::getTagId, queryParam.getTagId())
                 .eq(Objects.nonNull(queryParam.getPaperId()), Paper::getPaperId, queryParam.getPaperId())
+                .eq(Objects.nonNull(queryParam.getUserId()), Paper::getUserId, queryParam.getUserId())
                 .like(Objects.nonNull(queryParam.getTitle()), Paper::getTitle, queryParam.getTitle());
         // 排序规则
         LinkedHashMap<String, Boolean> orderByFields = paperPageQry.getOrderByFields();
@@ -136,7 +137,7 @@ public class PaperController {
     @PostMapping("/getPapersByUser")
     public ResultView<List<Paper>> getPapersByUser(
             @RequestParam("userId") Long userId,
-            @RequestParam("title") String title
+            @RequestParam(value = "title", required = false) String title
     ) {
         // 获取对应的班级
         User user = userService.getById(userId);

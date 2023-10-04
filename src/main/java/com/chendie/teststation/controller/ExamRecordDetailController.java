@@ -72,6 +72,9 @@ public class ExamRecordDetailController {
                 .distinct()
                 .collect(Collectors.toList());
         // 获取对应的标签
+        if (CollectionUtils.isEmpty(questionIds)) {
+            return ResultView.success();
+        }
         List<Long> tagIds = questionService.listByIds(questionIds).stream()
                 .map(Question::getTagId)
                 .distinct()
