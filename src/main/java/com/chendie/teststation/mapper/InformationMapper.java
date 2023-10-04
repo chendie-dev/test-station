@@ -2,6 +2,7 @@ package com.chendie.teststation.mapper;
 
 import com.chendie.teststation.entity.Information;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * <p>
@@ -11,6 +12,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author chendie
  * @since 2023-10-01
  */
+@Mapper
 public interface InformationMapper extends BaseMapper<Information> {
 
 }

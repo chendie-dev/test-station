@@ -9,11 +9,11 @@ import com.chendie.teststation.model.PageQry;
 import com.chendie.teststation.model.PageResult;
 import com.chendie.teststation.model.ResultView;
 import com.chendie.teststation.service.ITagService;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.LinkedHashMap;
@@ -28,7 +28,7 @@ import java.util.Objects;
  * @author chendie
  * @since 2023-10-01
  */
-@Controller
+@RestController
 @RequestMapping("/tag")
 public class TagController {
 

@@ -14,12 +14,8 @@ import com.chendie.teststation.model.ResultView;
 import com.chendie.teststation.service.IInformationService;
 import com.chendie.teststation.service.IUserInformationService;
 import com.chendie.teststation.service.IUserService;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -36,7 +32,7 @@ import java.util.stream.Collectors;
  * @author chendie
  * @since 2023-10-01
  */
-@Controller
+@RestController
 @RequestMapping("/information")
 public class InformationController {
     @Resource
