@@ -40,6 +40,7 @@ public class Tag implements Serializable {
     /**
      * 标签备注
      */
+    @TableField("`desc`")
     private String desc;
 
     /**
