@@ -10,6 +10,7 @@ import com.chendie.teststation.model.PageQry;
 import com.chendie.teststation.model.PageResult;
 import com.chendie.teststation.model.ResultView;
 import com.chendie.teststation.service.IPaperQuestionService;
+import com.chendie.teststation.service.IPaperService;
 import com.chendie.teststation.service.IQuestionService;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +36,8 @@ public class QuestionController {
     private IQuestionService questionService;
     @Resource
     private IPaperQuestionService paperQuestionService;
+    @Resource
+    private IPaperService paperService;
 
     @PostMapping("/addOrUpdateQuestion")
     public ResultView<IdView> addOrUpdateQuestion(

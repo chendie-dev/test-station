@@ -8,10 +8,7 @@ import com.chendie.teststation.entity.LessonPaper;
 import com.chendie.teststation.entity.Paper;
 import com.chendie.teststation.entity.PaperQuestion;
 import com.chendie.teststation.entity.User;
-import com.chendie.teststation.model.IdView;
-import com.chendie.teststation.model.PageQry;
-import com.chendie.teststation.model.PageResult;
-import com.chendie.teststation.model.ResultView;
+import com.chendie.teststation.model.*;
 import com.chendie.teststation.service.ILessonPaperService;
 import com.chendie.teststation.service.IPaperQuestionService;
 import com.chendie.teststation.service.IPaperService;
@@ -96,9 +93,10 @@ public class PaperController {
 
     @PostMapping("/addOrUpdateQuestion")
     public ResultView<Boolean> addOrUpdateQuestion(
-            @RequestParam("paperId") Long paperId,
-            @RequestParam("questionIds") List<Long> ids
+            @RequestBody AddOrUpdateQuestionModel addOrUpdateQuestionModel
     ) {
+        Long paperId = addOrUpdateQuestionModel.getPaperId();
+        List<Long> ids = addOrUpdateQuestionModel.getIds();
         // 删除之前的数据
         paperQuestionService
                 .remove(new LambdaQueryWrapper<PaperQuestion>()
@@ -116,9 +114,10 @@ public class PaperController {
 
     @PostMapping("/addOrUpdateLessons")
     public ResultView<Boolean> addOrUpdateLessons(
-            @RequestParam("paperId") Long paperId,
-            @RequestParam("lessonIds") List<Long> lessonIds
+            @RequestBody AddOrUpdateLessonsModel addOrUpdateLessonsModel
     ) {
+        List<Long> lessonIds = addOrUpdateLessonsModel.getLessonIds();
+        Long paperId = addOrUpdateLessonsModel.getPaperId();
         // 删除之前的关系
         lessonPaperService
                 .remove(new LambdaUpdateWrapper<LessonPaper>()
