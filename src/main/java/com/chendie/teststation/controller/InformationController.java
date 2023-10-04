@@ -89,6 +89,24 @@ public class InformationController {
         return ResultView.success(pageResult);
     }
 
+    @PostMapping("/getInformationByUser")
+    public ResultView<List<Information>> getInformationByUser(
+            @RequestBody User user
+    ) {
+        // 用于学生查询所有的信息
+        List<UserInformation> userInformationList = userInformationService
+                .list(new LambdaQueryWrapper<UserInformation>()
+                        .eq(UserInformation::getUserId, user.getUserId()));
+        List<Long> informationIdList = userInformationList.stream()
+                .map(UserInformation::getInformationId)
+                .collect(Collectors.toList());
+        if (CollectionUtils.isEmpty(informationIdList)) {
+            return ResultView.success();
+        }
+        List<Information> informationList = informationService.listByIds(informationIdList);
+        return ResultView.success(informationList);
+    }
+
     @PostMapping("/send")
     public ResultView<Boolean> send(
             @RequestParam(value = "informationId") Long informationId,
@@ -112,6 +130,7 @@ public class InformationController {
         if (Objects.isNull(userId) && Objects.isNull(lessonId)) {
             List<User> userList = userService.list();
             List<Long> list = userList.stream()
+                    .filter(user -> "student".equals(user.getRealName()))
                     .map(User::getUserId)
                     .collect(Collectors.toList());
             userIdList.addAll(list);
@@ -128,7 +147,7 @@ public class InformationController {
         List<UserInformation> userInformationList1 = userIdList.stream().map(id -> {
             UserInformation userInformation = new UserInformation();
             userInformation.setInformationId(informationId);
-            userInformation.setUserId(userId);
+            userInformation.setUserId(id);
             return userInformation;
         }).collect(Collectors.toList());
         boolean ok = userInformationService.saveOrUpdateBatch(userInformationList1);
