@@ -8,7 +8,7 @@ spring:
   # 数据库配置
   datasource:
     username: root
-    password: cyhcd5201314
+    password: 1314520ASD@
     url: jdbc:mysql://localhost:3306/test_station?serverTimezone=UTC&useUnicode=true
     driver-class-name: com.mysql.cj.jdbc.Driver
 

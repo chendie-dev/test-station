@@ -47,6 +47,20 @@ public class UserController {
         return ResultView.success(idView);
     }
 
+    @PostMapping("/login")
+    public ResultView<User> login(
+            @RequestBody User user
+    ) {
+        List<User> userList = userService
+                .list(new LambdaQueryWrapper<User>()
+                        .eq(User::getUsername, user.getUsername())
+                        .eq(User::getPassword, user.getPassword()));
+        if (!CollectionUtils.isEmpty(userList)) {
+            return ResultView.success(userList.get(0));
+        }
+        return ResultView.success();
+    }
+
     @PostMapping("/deleteStudents")
     public ResultView<Boolean> deleteStudents(
             @RequestBody List<Long> ids
