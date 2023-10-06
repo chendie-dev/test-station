@@ -1,15 +1,18 @@
 package com.chendie.teststation.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.chendie.teststation.convert.TagConvert;
 import com.chendie.teststation.entity.Paper;
+import com.chendie.teststation.entity.Question;
 import com.chendie.teststation.entity.Tag;
 import com.chendie.teststation.model.IdView;
 import com.chendie.teststation.model.PageQry;
 import com.chendie.teststation.model.PageResult;
 import com.chendie.teststation.model.ResultView;
 import com.chendie.teststation.service.IPaperService;
+import com.chendie.teststation.service.IQuestionService;
 import com.chendie.teststation.service.ITagService;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,6 +41,8 @@ public class TagController {
     private ITagService tagService;
     @Resource
     private IPaperService paperService;
+    @Resource
+    private IQuestionService questionService;
 
     @PostMapping("/addOrUpdateTag")
     public ResultView<IdView> addOrUpdateTag(
@@ -67,8 +72,20 @@ public class TagController {
     public ResultView<Boolean> deleteTags(
             @RequestBody List<Long> ids
     ) {
-        boolean ok = tagService.removeByIds(ids);
-        return ResultView.success(ok);
+        // 查询试题表，如果有引用，则false
+        List<Question> questionList = questionService
+                .list(new LambdaQueryWrapper<Question>()
+                        .in(Question::getTagId, ids));
+        if (CollectionUtils.isEmpty(questionList)) {
+            boolean ok = tagService.removeByIds(ids);
+            return ResultView.success(ok);
+        } else {
+            // 同时删除清空对应的专项训练
+            paperService
+                    .remove(new LambdaUpdateWrapper<Paper>()
+                            .in(Paper::getTagId, ids));
+            return ResultView.success(false);
+        }
     }
 
     @PostMapping("/getTagsByPage")
