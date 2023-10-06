@@ -78,12 +78,12 @@ public class TagController {
                         .in(Question::getTagId, ids));
         if (CollectionUtils.isEmpty(questionList)) {
             boolean ok = tagService.removeByIds(ids);
-            return ResultView.success(ok);
-        } else {
             // 同时删除清空对应的专项训练
             paperService
                     .remove(new LambdaUpdateWrapper<Paper>()
                             .in(Paper::getTagId, ids));
+            return ResultView.success(ok);
+        } else {
             return ResultView.success(false);
         }
     }

@@ -49,25 +49,39 @@ public class QuestionController {
         if (Objects.nonNull(question.getQuestionId())) {
             // 根据标签新增到对应的试卷
             if (Objects.nonNull(question.getTagId())) {
+                // 删除之前的标签对应的试卷
+                Question question1 = questionService.getById(question.getQuestionId());
                 List<Paper> paperList = paperService
                         .list(new LambdaQueryWrapper<Paper>()
-                                .eq(Paper::getTagId, question.getTagId()));
+                                .eq(Paper::getTagId, question1.getTagId()));
                 if (CollectionUtils.isEmpty(paperList)) {
                     return ResultView.fail("error paper");
                 }
                 Paper paper = paperList.get(0);
-                // 删除之前的
-                Question question1 = questionService.getById(question.getQuestionId());
                 paperQuestionService
                         .remove(new LambdaUpdateWrapper<PaperQuestion>()
                                 .eq(PaperQuestion::getPaperId, paper.getPaperId())
                                 .eq(PaperQuestion::getQuestionId, question1.getQuestionId()));
+                // 更新之前的分数
+                paper.setTotalScore(paper.getTotalScore() - question1.getScore());
+                paperService.saveOrUpdate(paper);
 
                 // 新增现在的
+                List<Paper> paperList1 = paperService
+                        .list(new LambdaQueryWrapper<Paper>()
+                                .eq(Paper::getTagId, question.getTagId()));
+                if (CollectionUtils.isEmpty(paperList1)) {
+                    return ResultView.fail("error paper");
+                }
+                Paper paper1 = paperList1.get(0);
                 PaperQuestion paperQuestion = new PaperQuestion();
                 paperQuestion.setQuestionId(question.getQuestionId());
-                paperQuestion.setPaperId(paper.getPaperId());
+                paperQuestion.setPaperId(paper1.getPaperId());
                 paperQuestionService.save(paperQuestion);
+
+                // 更新之前的分数
+                paper1.setTotalScore(paper1.getTotalScore() + question1.getScore());
+                paperService.saveOrUpdate(paper1);
             }
             // 更新分数
             if (Objects.nonNull(question.getScore())) {
