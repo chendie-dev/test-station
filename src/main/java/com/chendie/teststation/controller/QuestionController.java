@@ -1,8 +1,10 @@
 package com.chendie.teststation.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.chendie.teststation.convert.QuestionConvert;
+import com.chendie.teststation.entity.Paper;
 import com.chendie.teststation.entity.PaperQuestion;
 import com.chendie.teststation.entity.Question;
 import com.chendie.teststation.model.IdView;
@@ -43,12 +45,90 @@ public class QuestionController {
     public ResultView<IdView> addOrUpdateQuestion(
             @RequestBody Question question
     ) {
-        boolean ok = questionService.saveOrUpdate(question);
-        IdView idView = IdView.builder().build();
-        if (ok) {
-            idView.setId(question.getQuestionId());
+        // 区分一下新增和更新
+        if (Objects.nonNull(question.getQuestionId())) {
+            // 根据标签新增到对应的试卷
+            if (Objects.nonNull(question.getTagId())) {
+                List<Paper> paperList = paperService
+                        .list(new LambdaQueryWrapper<Paper>()
+                                .eq(Paper::getTagId, question.getTagId()));
+                if (CollectionUtils.isEmpty(paperList)) {
+                    return ResultView.fail("error paper");
+                }
+                Paper paper = paperList.get(0);
+                // 删除之前的
+                Question question1 = questionService.getById(question.getQuestionId());
+                paperQuestionService
+                        .remove(new LambdaUpdateWrapper<PaperQuestion>()
+                                .eq(PaperQuestion::getPaperId, paper.getPaperId())
+                                .eq(PaperQuestion::getQuestionId, question1.getQuestionId()));
+
+                // 新增现在的
+                PaperQuestion paperQuestion = new PaperQuestion();
+                paperQuestion.setQuestionId(question.getQuestionId());
+                paperQuestion.setPaperId(paper.getPaperId());
+                paperQuestionService.save(paperQuestion);
+            }
+            // 更新分数
+            if (Objects.nonNull(question.getScore())) {
+                // 查询之前的分数，做diff
+                Question question1 = questionService.getById(question.getQuestionId());
+                int diff = question.getScore() - question1.getScore();
+                List<PaperQuestion> paperQuestionList = paperQuestionService
+                        .list(new LambdaQueryWrapper<PaperQuestion>()
+                                .eq(PaperQuestion::getQuestionId, question.getQuestionId()));
+                // 更新分数
+                paperQuestionList.forEach(paperQuestion -> {
+                    // 查询之前的paper
+                    Paper paper = paperService.getById(paperQuestion.getPaperId());
+                    paper.setTotalScore(paper.getTotalScore() + diff);
+                    paperService.saveOrUpdate(paper);
+                });
+            }
+            boolean ok = questionService.saveOrUpdate(question);
+            IdView idView = IdView.builder().build();
+            if (ok) {
+                idView.setId(question.getQuestionId());
+            }
+            return ResultView.success(idView);
+        } else {
+            boolean ok = questionService.saveOrUpdate(question);
+            // 根据标签新增到对应的试卷
+            if (Objects.nonNull(question.getTagId())) {
+                List<Paper> paperList = paperService
+                        .list(new LambdaQueryWrapper<Paper>()
+                                .eq(Paper::getTagId, question.getTagId()));
+                if (CollectionUtils.isEmpty(paperList)) {
+                    return ResultView.fail("error paper");
+                }
+                Paper paper = paperList.get(0);
+                // 添加现在的
+                PaperQuestion paperQuestion = new PaperQuestion();
+                paperQuestion.setQuestionId(question.getQuestionId());
+                paperQuestion.setPaperId(paper.getPaperId());
+                paperQuestionService.save(paperQuestion);
+            }
+
+            // 更新分数
+            if (Objects.nonNull(question.getScore())) {
+                List<PaperQuestion> paperQuestionList = paperQuestionService
+                        .list(new LambdaQueryWrapper<PaperQuestion>()
+                                .eq(PaperQuestion::getQuestionId, question.getQuestionId()));
+                // 更新分数
+                paperQuestionList.forEach(paperQuestion -> {
+                    // 查询之前的paper
+                    Paper paper = paperService.getById(paperQuestion.getPaperId());
+                    paper.setTotalScore(paper.getTotalScore() + question.getScore());
+                    paperService.saveOrUpdate(paper);
+                });
+            }
+
+            IdView idView = IdView.builder().build();
+            if (ok) {
+                idView.setId(question.getQuestionId());
+            }
+            return ResultView.success(idView);
         }
-        return ResultView.success(idView);
     }
 
     @PostMapping("/deleteQuestions")
