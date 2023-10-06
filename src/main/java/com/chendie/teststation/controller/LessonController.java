@@ -5,12 +5,14 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.chendie.teststation.convert.LessonConvert;
 import com.chendie.teststation.entity.Lesson;
 import com.chendie.teststation.entity.LessonPaper;
+import com.chendie.teststation.entity.User;
 import com.chendie.teststation.model.IdView;
 import com.chendie.teststation.model.PageQry;
 import com.chendie.teststation.model.PageResult;
 import com.chendie.teststation.model.ResultView;
 import com.chendie.teststation.service.ILessonPaperService;
 import com.chendie.teststation.service.ILessonService;
+import com.chendie.teststation.service.IUserService;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,6 +37,8 @@ public class LessonController {
     private ILessonService lessonService;
     @Resource
     private ILessonPaperService lessonPaperService;
+    @Resource
+    private IUserService userService;
 
     @PostMapping("/addOrUpdateLesson")
     public ResultView<IdView> addOrUpdateLesson(
@@ -52,6 +56,14 @@ public class LessonController {
     public ResultView<Boolean> deleteLessons(
             @RequestBody List<Long> ids
     ) {
+        // 查询是否有用户使用
+        List<User> userList = userService
+                .list(new LambdaQueryWrapper<User>()
+                        .in(User::getLessonId, ids));
+        if (!CollectionUtils.isEmpty(userList)) {
+            userList.forEach(user -> user.setLessonId(0L));
+            userService.saveOrUpdateBatch(userList);
+        }
         boolean ok = lessonService.removeByIds(ids);
         return ResultView.success(ok);
     }
