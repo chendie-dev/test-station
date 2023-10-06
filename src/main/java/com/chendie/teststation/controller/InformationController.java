@@ -58,6 +58,10 @@ public class InformationController {
     public ResultView<Boolean> deleteInformation(
             @RequestBody List<Long> ids
     ) {
+        // 删除关系表的内容
+        userInformationService
+                .remove(new LambdaUpdateWrapper<UserInformation>()
+                        .in(UserInformation::getInformationId, ids));
         boolean ok = informationService.removeByIds(ids);
         return ResultView.success(ok);
     }
