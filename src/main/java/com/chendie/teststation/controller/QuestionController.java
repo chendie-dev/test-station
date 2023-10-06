@@ -149,6 +149,18 @@ public class QuestionController {
     public ResultView<Boolean> deleteQuestions(
             @RequestBody List<Long> ids
     ) {
+        // 更新paper的分数
+        List<PaperQuestion> paperQuestionList = paperQuestionService
+                .list(new LambdaQueryWrapper<PaperQuestion>()
+                        .in(PaperQuestion::getQuestionId, ids));
+        paperQuestionList.forEach(paperQuestion -> {
+            Paper paper = paperService.getById(paperQuestion.getPaperId());
+            Question question = questionService.getById(paperQuestion.getQuestionId());
+            paper.setTotalScore(paper.getTotalScore() - question.getScore());
+            paperService.saveOrUpdate(paper);
+        });
+        // 删除关系表的数据
+        paperQuestionService.remove(new LambdaUpdateWrapper<PaperQuestion>().in(PaperQuestion::getQuestionId, ids));
         boolean ok = questionService.removeByIds(ids);
         return ResultView.success(ok);
     }
