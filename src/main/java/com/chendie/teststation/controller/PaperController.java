@@ -4,15 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.chendie.teststation.convert.PaperConvert;
-import com.chendie.teststation.entity.LessonPaper;
-import com.chendie.teststation.entity.Paper;
-import com.chendie.teststation.entity.PaperQuestion;
-import com.chendie.teststation.entity.User;
+import com.chendie.teststation.entity.*;
 import com.chendie.teststation.model.*;
-import com.chendie.teststation.service.ILessonPaperService;
-import com.chendie.teststation.service.IPaperQuestionService;
-import com.chendie.teststation.service.IPaperService;
-import com.chendie.teststation.service.IUserService;
+import com.chendie.teststation.service.*;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,6 +35,10 @@ public class PaperController {
     private ILessonPaperService lessonPaperService;
     @Resource
     private IUserService userService;
+    @Resource
+    private IExamRecordService examRecordService;
+    @Resource
+    private IExamRecordDetailService examRecordDetailService;
 
     @PostMapping("/addPaperOrUpdate")
     public ResultView<IdView> addPaperOrUpdate(
@@ -58,6 +56,30 @@ public class PaperController {
     public ResultView<Boolean> deletePapers(
             @RequestBody List<Long> ids
     ) {
+        // 删除paper question
+        paperQuestionService
+                .remove(new LambdaUpdateWrapper<PaperQuestion>()
+                        .in(PaperQuestion::getPaperId, ids));
+        // 删除Lesson paper
+        lessonPaperService
+                .remove(new LambdaUpdateWrapper<LessonPaper>()
+                        .in(LessonPaper::getPaperId, ids));
+        // 删除考试记录
+        List<ExamRecord> examRecords = examRecordService
+                .list(new LambdaQueryWrapper<ExamRecord>()
+                        .in(ExamRecord::getPaperId, ids));
+        examRecordService
+                .remove(new LambdaUpdateWrapper<ExamRecord>()
+                        .in(ExamRecord::getPaperId, ids));
+        // 删除考试记录详情
+        if (!CollectionUtils.isEmpty(examRecords)) {
+            List<Long> recordIds = examRecords.stream()
+                    .map(ExamRecord::getRecordId)
+                    .collect(Collectors.toList());
+            examRecordDetailService
+                    .remove(new LambdaUpdateWrapper<ExamRecordDetail>()
+                            .in(ExamRecordDetail::getRecordId, recordIds));
+        }
         boolean ok = paperService.removeByIds(ids);
         return ResultView.success(ok);
     }
