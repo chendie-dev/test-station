@@ -7,10 +7,7 @@ import com.chendie.teststation.convert.InformationConvert;
 import com.chendie.teststation.entity.Information;
 import com.chendie.teststation.entity.User;
 import com.chendie.teststation.entity.UserInformation;
-import com.chendie.teststation.model.IdView;
-import com.chendie.teststation.model.PageQry;
-import com.chendie.teststation.model.PageResult;
-import com.chendie.teststation.model.ResultView;
+import com.chendie.teststation.model.*;
 import com.chendie.teststation.service.IInformationService;
 import com.chendie.teststation.service.IUserInformationService;
 import com.chendie.teststation.service.IUserService;
@@ -160,16 +157,14 @@ public class InformationController {
 
     @PostMapping("/read")
     public ResultView<Boolean> read(
-            @RequestParam(value = "informationId") Long informationId,
-            @RequestParam(value = "userId", required = false) Long userId
+            @RequestBody InformationReadModel informationReadModel
     ) {
-        UserInformation userInformation = new UserInformation();
-        userInformation.setInformationId(informationId);
-        userInformation.setUserId(userId);
+        Long userId = informationReadModel.getUserId();
+        List<Long> informationIdList = informationReadModel.getInformationIdList();
         LambdaUpdateWrapper<UserInformation> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper
                 .set(UserInformation::getIsRead, 1)
-                .eq(UserInformation::getInformationId, informationId)
+                .in(UserInformation::getInformationId, informationIdList)
                 .eq(UserInformation::getUserId, userId);
         boolean update = userInformationService.update(updateWrapper);
         return ResultView.success(update);

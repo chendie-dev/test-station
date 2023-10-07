@@ -58,7 +58,7 @@ public class UserController {
         if (!CollectionUtils.isEmpty(userList)) {
             return ResultView.success(userList.get(0));
         }
-        return ResultView.success();
+        return ResultView.fail("用户名或者密码错误");
     }
 
     @PostMapping("/deleteStudents")

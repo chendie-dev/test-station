@@ -54,17 +54,16 @@ public class QuestionController {
                 List<Paper> paperList = paperService
                         .list(new LambdaQueryWrapper<Paper>()
                                 .eq(Paper::getTagId, question1.getTagId()));
-                if (CollectionUtils.isEmpty(paperList)) {
-                    return ResultView.fail("error paper");
+                if (!CollectionUtils.isEmpty(paperList)) {
+                    Paper paper = paperList.get(0);
+                    paperQuestionService
+                            .remove(new LambdaUpdateWrapper<PaperQuestion>()
+                                    .eq(PaperQuestion::getPaperId, paper.getPaperId())
+                                    .eq(PaperQuestion::getQuestionId, question1.getQuestionId()));
+                    // 更新之前的分数
+                    paper.setTotalScore(paper.getTotalScore() - question1.getScore());
+                    paperService.saveOrUpdate(paper);
                 }
-                Paper paper = paperList.get(0);
-                paperQuestionService
-                        .remove(new LambdaUpdateWrapper<PaperQuestion>()
-                                .eq(PaperQuestion::getPaperId, paper.getPaperId())
-                                .eq(PaperQuestion::getQuestionId, question1.getQuestionId()));
-                // 更新之前的分数
-                paper.setTotalScore(paper.getTotalScore() - question1.getScore());
-                paperService.saveOrUpdate(paper);
 
                 // 新增现在的
                 List<Paper> paperList1 = paperService
