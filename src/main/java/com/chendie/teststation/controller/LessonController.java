@@ -109,6 +109,9 @@ public class LessonController {
         List<Long> lessonIdList = lessonPaperList.stream()
                 .map(LessonPaper::getLessonId)
                 .collect(Collectors.toList());
+        if (CollectionUtils.isEmpty(lessonIdList)) {
+            return ResultView.success();
+        }
         List<Lesson> lessonList = lessonService.listByIds(lessonIdList);
         return ResultView.success(lessonList);
     }

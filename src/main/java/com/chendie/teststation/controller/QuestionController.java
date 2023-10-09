@@ -204,6 +204,9 @@ public class QuestionController {
         List<Long> questionIdList = paperQuestions.stream()
                 .map(PaperQuestion::getQuestionId)
                 .collect(Collectors.toList());
+        if (CollectionUtils.isEmpty(questionIdList)) {
+            return ResultView.success();
+        }
         List<Question> questionList = questionService.listByIds(questionIdList);
         return ResultView.success(questionList);
     }
