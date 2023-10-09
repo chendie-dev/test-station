@@ -92,12 +92,14 @@ public class InformationController {
 
     @PostMapping("/getInformationByUser")
     public ResultView<List<Information>> getInformationByUser(
-            @RequestBody User user
+            @RequestParam("userId") Long userId,
+            @RequestParam(value = "isRead", required = false) Integer isRead
     ) {
         // 用于学生查询所有的信息
         List<UserInformation> userInformationList = userInformationService
                 .list(new LambdaQueryWrapper<UserInformation>()
-                        .eq(UserInformation::getUserId, user.getUserId()));
+                        .eq(UserInformation::getUserId, userId)
+                        .eq(Objects.nonNull(isRead), UserInformation::getIsRead, isRead));
         List<Long> informationIdList = userInformationList.stream()
                 .map(UserInformation::getInformationId)
                 .collect(Collectors.toList());
