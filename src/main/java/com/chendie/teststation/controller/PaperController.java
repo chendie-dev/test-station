@@ -36,6 +36,8 @@ public class PaperController {
     @Resource
     private IUserService userService;
     @Resource
+    private IQuestionService questionService;
+    @Resource
     private IExamRecordService examRecordService;
     @Resource
     private IExamRecordDetailService examRecordDetailService;
@@ -131,6 +133,11 @@ public class PaperController {
             paperQuestion.setPaperId(paperId);
             return paperQuestion;
         }).collect(Collectors.toList());
+        // 重新计算paper总分
+        List<Question> questionList = questionService.listByIds(ids);
+        Paper paper = paperService.getById(paperId);
+        paper.setTotalScore(questionList.stream().mapToInt(Question::getScore).sum());
+        paperService.updateById(paper);
         boolean saveBatch = paperQuestionService.saveBatch(paperQuestionList);
         return ResultView.success(saveBatch);
     }
