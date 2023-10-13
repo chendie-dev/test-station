@@ -39,17 +39,14 @@ public class ExamRecordDetailController {
     private ITagService tagService;
 
     @PostMapping("/getExamRecordDetail")
-    public ResultView<ExamRecordDetail> getExamRecordDetail(
+    public ResultView<List<ExamRecordDetail>> getExamRecordDetail(
             @RequestBody ExamRecordDetail examRecordDetail
     ) {
         List<ExamRecordDetail> examRecordDetails = examRecordDetailService
                 .list(new LambdaQueryWrapper<ExamRecordDetail>()
                         .eq(Objects.nonNull(examRecordDetail.getRecordId()),
                                 ExamRecordDetail::getRecordId, examRecordDetail.getRecordId()));
-        if (!CollectionUtils.isEmpty(examRecordDetails)) {
-            return ResultView.success(examRecordDetails.get(0));
-        }
-        return ResultView.success();
+        return ResultView.success(examRecordDetails);
     }
 
     @PostMapping("/getErrorTag")
