@@ -79,7 +79,7 @@ public class UserController {
         // 条件
         queryWrapper
                 .eq(Objects.nonNull(queryParam.getUserId()), User::getUserId, queryParam.getUserId())
-                .eq(User::getRoleName, "student")
+                .eq(Objects.nonNull(queryParam.getRoleName()), User::getRoleName, queryParam.getRoleName())
                 .like(Objects.nonNull(queryParam.getRealName()), User::getRealName, queryParam.getRealName());
         // 排序规则
         LinkedHashMap<String, Boolean> orderByFields = userPageQry.getOrderByFields();
